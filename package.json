@@ -1,0 +1,16 @@
+{
+  "name": "todo2",
+  "version": "1.0.0",
+  "description": "Starting point for the second ToDo list exercise",
+  "scripts": {
+    "test": "eslint src/toDo_.* && jest src/ToDo.test.js",
+    "test:ToDo": "eslint src/ToDo.* && jest src/ToDo.test.js",
+    "test:ToDoManager": "eslint src/ToDoManager.* && jest src/ToDoManager.test.js"
+  },
+  "author": "Jérémie Patonnier <jeremie@zenika.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^6.5.1",
+    "jest": "^24.9.0"
+  }
+}
