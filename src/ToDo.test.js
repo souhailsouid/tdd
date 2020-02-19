@@ -1,4 +1,4 @@
-const { Item, ToDo } = require(`./ToDo_.js`)
+const { Item, ToDo } = require(`./ToDo.js`)
 
 const ID_RGX = /^[a-z][a-z0-9]{7}$/i
 const ITEM_ERR = new Error(`Item must be created with a non empty string`)
