@@ -12,9 +12,8 @@ class Item {
     if(!isValidItems(content)) {
       throw new Error("Item must be created with a non empty string")
     }
-    
     this.content = content.content || content
- 
+    
     this.checked = content.checked ||  false
     this.id = id()
 
@@ -48,21 +47,40 @@ class ToDo extends Array{
       this.push(...data)
     }
    
+   
   }
   concat(...args) {
+    console.log(args)
     const arr = Array.from(this).concat(...args)
     return new ToDo("", arr)
   }
+ 
   fill(...args){
+  
     if (!isValidItems(args[0])) {
       return this
     }
-    if(typeof args[0] === 'string' || args[0] instanceof Item){
+    if(typeof args[0] === 'string' || args instanceof Item){
       args[0] = new Item(args[0])
     }
-    return super.fill(...args)
+
+    return super.fill( ...args)
   }
- 
+  splice(...args) {
+    console.log(args)
+    if (args.length > 2) {
+      const data = args.splice(2)
+        .filter(isValidItems)
+        .map(val => new Item(val))
+      args = args.concat(data)
+    }
+    return super.splice(...args)
+  }
+  unshift(...args) {
+    return super.unshift(...args
+      .filter(isValidItems)
+      .map(val => typeof val === 'string' ? new Item(val): val))
+  }
   push (...args) {
 
     return super.push(...args
@@ -87,6 +105,7 @@ class ToDo extends Array{
 
     if(!id ) return false
     const pos = this.findIndex((i)=> i.id === id)
+
     // Without any Item matching the id, there is nothing to remove
     if (pos === -1) { return false }
 
@@ -97,7 +116,8 @@ class ToDo extends Array{
   toJSON() {
     return {
       title: this.title,
-      items: Array.from(this)
+      items: Array.from(this),
+     
     }
   }
 }

@@ -374,144 +374,144 @@ describe(`Test the ToDo class (Custom API)`, () => {
       }
     })
   })
+
+  test(`todo.fill(<any>, ...<number>)`, () => {
+    const tests = [
+      [true],
+      [true, 1],
+      [true, 1, 2],
+      [42],
+      [42, 1],
+      [42, 1, 2],
+      [null],
+      [null, 1],
+      [null, 1, 2],
+      [undefined],
+      [undefined, 1],
+      [undefined, 1, 2],
+      [{}],
+      [{}, 1],
+      [{}, 1, 2],
+      [[]],
+      [[], 1],
+      [[], 1, 2],
+      [() => {}],
+      [() => {}, 1],
+      [() => {}, 1, 2]
+    ]
+
+    tests.forEach(args => {
+      const todo = new ToDo(`CAN I HAZ CHEESBURGER?`)
+      todo.length = 3
+
+      const res = todo.fill(...args)
+      expect(res).toBe(todo)
+      expect(res).toHaveLength(3)
+      res.forEach(item => {
+        expect(item).toBe(undefined)
+      })
+    })
+  })
+
+  test(`todo.push(...<any>)`, () => {
+    const todo  = new ToDo(`CAN I HAZ CHEESBURGER?`)
+    const values = [
+      `Cats rulez!`,
+      new Item(`Human must die!`),
+      42,
+      NaN,
+      {},
+      [],
+      () => {},
+      undefined,
+      null
+    ]
+
+    const len = todo.push(...values)
+
+    expect(len).toBe(2)
+    expect(todo).toHaveLength(len)
+    expect(todo[0]).toBeInstanceOf(Item)
+    expect(todo[0].content).toBe(values[0])
+    expect(todo[1]).toBe(values[1])
+  })
+
+  test(`todo.splice(...<number>, ...<any>)`, () => {
+    const tests = [
+      [],
+      [0],
+      [0, `wut`],
+      [0, 1],
+      [1, 1, `Meaow`],
+      [1, 0, `Meaow`]
+    ]
+
+    tests.forEach(args => {
+      const len = args.length
+      const todo  = new ToDo(`CAN I HAZ CHEESBURGER?`, [
+        `Cats rulez!`,
+        `Human must die!`
+      ])
+
+      const items = Array.from(todo)
+      const res = todo.splice(...args)
+
+      expect(res).toBeInstanceOf(ToDo)
+      expect(res).not.toBe(todo)
+      expect(res.title).toBe('')
+
+      if (len === 0 || (len === 2 && typeof args[1] === 'string')) {
+        expect(res).toHaveLength(0)
+        expect(todo).toHaveLength(2)
+      }
+
+      else if (len === 1) {
+        expect(res).toHaveLength(2)
+        expect(todo).toHaveLength(0)
+        expect(res[0]).toBe(items[0])
+        expect(res[1]).toBe(items[1])
+      }
+
+      else if (len === 2) {
+        expect(res).toHaveLength(1)
+        expect(todo).toHaveLength(1)
+        expect(res[0]).toBe(items[0])
+        expect(todo[0]).toBe(items[1])
+      }
+
+      else if (len === 3) {
+        expect(res).toHaveLength(args[1])
+        expect(todo).toHaveLength(3 - args[1])
+        expect(todo[1]).toBeInstanceOf(Item)
+        expect(todo[1].content).toBe(args[2])
+
+        if (args[1] === 0) {
+          expect(todo[2]).toBe(items[1])
+        }
+      }
+    })
+  })
+
+  test(`todo.unshift(...<any>)`, () => {
+    const todo  = new ToDo(`CAN I HAZ CHEESBURGER?`)
+    const items = [
+      `Cats rulez!`,
+      new Item(`Human must die!`),
+      42,
+      NaN,
+      {},
+      [],
+      () => {},
+      undefined,
+      null
+    ]
+
+    const len = todo.unshift(...items)
+
+    expect(len).toBe(2)
+    expect(todo).toHaveLength(len)
+    expect(todo[0]).toBeInstanceOf(Item)
+    expect(todo[0].content).toBe(items[0])
+    expect(todo[1]).toBe(items[1])
+  })
 })
-//   test(`todo.fill(<any>, ...<number>)`, () => {
-//     const tests = [
-//       [true],
-//       [true, 1],
-//       [true, 1, 2],
-//       [42],
-//       [42, 1],
-//       [42, 1, 2],
-//       [null],
-//       [null, 1],
-//       [null, 1, 2],
-//       [undefined],
-//       [undefined, 1],
-//       [undefined, 1, 2],
-//       [{}],
-//       [{}, 1],
-//       [{}, 1, 2],
-//       [[]],
-//       [[], 1],
-//       [[], 1, 2],
-//       [() => {}],
-//       [() => {}, 1],
-//       [() => {}, 1, 2]
-//     ]
-
-//     tests.forEach(args => {
-//       const todo = new ToDo(`CAN I HAZ CHEESBURGER?`)
-//       todo.length = 3
-
-//       const res = todo.fill(...args)
-//       expect(res).toBe(todo)
-//       expect(res).toHaveLength(3)
-//       res.forEach(item => {
-//         expect(item).toBe(undefined)
-//       })
-//     })
-//   })
-
-//   test(`todo.push(...<any>)`, () => {
-//     const todo  = new ToDo(`CAN I HAZ CHEESBURGER?`)
-//     const values = [
-//       `Cats rulez!`,
-//       new Item(`Human must die!`),
-//       42,
-//       NaN,
-//       {},
-//       [],
-//       () => {},
-//       undefined,
-//       null
-//     ]
-
-//     const len = todo.push(...values)
-
-//     expect(len).toBe(2)
-//     expect(todo).toHaveLength(len)
-//     expect(todo[0]).toBeInstanceOf(Item)
-//     expect(todo[0].content).toBe(values[0])
-//     expect(todo[1]).toBe(values[1])
-//   })
-
-//   test(`todo.splice(...<number>, ...<any>)`, () => {
-//     const tests = [
-//       [],
-//       [0],
-//       [0, `wut`],
-//       [0, 1],
-//       [1, 1, `Meaow`],
-//       [1, 0, `Meaow`]
-//     ]
-
-//     tests.forEach(args => {
-//       const len = args.length
-//       const todo  = new ToDo(`CAN I HAZ CHEESBURGER?`, [
-//         `Cats rulez!`,
-//         `Human must die!`
-//       ])
-
-//       const items = Array.from(todo)
-//       const res = todo.splice(...args)
-
-//       expect(res).toBeInstanceOf(ToDo)
-//       expect(res).not.toBe(todo)
-//       expect(res.title).toBe('')
-
-//       if (len === 0 || (len === 2 && typeof args[1] === 'string')) {
-//         expect(res).toHaveLength(0)
-//         expect(todo).toHaveLength(2)
-//       }
-
-//       else if (len === 1) {
-//         expect(res).toHaveLength(2)
-//         expect(todo).toHaveLength(0)
-//         expect(res[0]).toBe(items[0])
-//         expect(res[1]).toBe(items[1])
-//       }
-
-//       else if (len === 2) {
-//         expect(res).toHaveLength(1)
-//         expect(todo).toHaveLength(1)
-//         expect(res[0]).toBe(items[0])
-//         expect(todo[0]).toBe(items[1])
-//       }
-
-//       else if (len === 3) {
-//         expect(res).toHaveLength(args[1])
-//         expect(todo).toHaveLength(3 - args[1])
-//         expect(todo[1]).toBeInstanceOf(Item)
-//         expect(todo[1].content).toBe(args[2])
-
-//         if (args[1] === 0) {
-//           expect(todo[2]).toBe(items[1])
-//         }
-//       }
-//     })
-//   })
-
-//   test(`todo.unshift(...<any>)`, () => {
-//     const todo  = new ToDo(`CAN I HAZ CHEESBURGER?`)
-//     const items = [
-//       `Cats rulez!`,
-//       new Item(`Human must die!`),
-//       42,
-//       NaN,
-//       {},
-//       [],
-//       () => {},
-//       undefined,
-//       null
-//     ]
-
-//     const len = todo.unshift(...items)
-
-//     expect(len).toBe(2)
-//     expect(todo).toHaveLength(len)
-//     expect(todo[0]).toBeInstanceOf(Item)
-//     expect(todo[0].content).toBe(items[0])
-//     expect(todo[1]).toBe(items[1])
-//   })
-// })
